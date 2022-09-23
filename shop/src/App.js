@@ -5,9 +5,7 @@ import Authentication from "./routes/authentication/authentication";
 import Shop from "./routes/shop/shop";
 import Checkout from "./routes/checkout/checkout";
 import { useEffect } from "react";
-import { changeUser, checkUserSession } from "./store/user/user-action"
-
-import { createUserDocumentFromAuth, getCurrentUser, onAuthStateChangedListener } from "./routes/utils/firebase";
+import { checkUserSession } from "./store/user/user-action"
 import { useDispatch } from "react-redux";
 
 const App = () => {

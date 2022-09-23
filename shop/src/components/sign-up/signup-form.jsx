@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth, signInWithGooglePopup } from "../../routes/utils/firebase";
+import { useDispatch } from "react-redux";
+import { createUserDocumentFromAuth, signInWithGooglePopup } from "../../routes/utils/firebase";
+import { signupStart } from "../../store/user/user-action";
 import FormInput from "../form-input/form-input";
 
 const initialState = {
@@ -13,6 +15,7 @@ const SignupForm = () => {
 
     const [state, setstate] = useState(initialState);
     const { displayName, email, password, confirmPassword } = state;
+    const dispatch = useDispatch();
 
     // console.log(state);
 
@@ -38,9 +41,7 @@ const SignupForm = () => {
         }
 
         try {
-            const response = await createAuthUserWithEmailAndPassword(email, password);
-            console.log(response);
-            // await createUserDocumentFromAuth(user, { displayName })
+            dispatch(signupStart(email, password, displayName));
             setstate(initialState);
 
         } catch (error) {
