@@ -17,9 +17,10 @@ const firebaseConfig = {
     storageBucket: "e-commerce-pratice.appspot.com",
     messagingSenderId: "901223257630",
     appId: "1:901223257630:web:373d769e0edcecefd5c00f"
-  };
+};
 
 // Initialize Firebase
+// eslint-disable-next-line
 const firebaseApp = initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();
@@ -37,32 +38,25 @@ export const db = getFirestore();
 export const addCollectionAndDocuments = async (
     collectionKey,
     objectsToAdd
-  ) => {
+) => {
     const batch = writeBatch(db);
     const collectionRef = collection(db, collectionKey);
-  
-    objectsToAdd.forEach(async (object) => {
-      const docRef = doc(collectionRef, object.title.toLowerCase());
-      batch.set(docRef, object);
-    });
-  
-    await batch.commit();
-    console.log('done');
-  };
 
-  export const getCategoriesAndDocuments = async () => {
+    objectsToAdd.forEach(async (object) => {
+        const docRef = doc(collectionRef, object.title.toLowerCase());
+        batch.set(docRef, object);
+    });
+
+    await batch.commit();
+};
+
+export const getCategoriesAndDocuments = async () => {
     const collectionRef = collection(db, 'categories');
     const q = query(collectionRef);
 
     const querySnapshot = await getDocs(q);
-    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot)=>{
-        const {title, items} = docSnapshot.data();
-        acc[title.toLowerCase()] = items;
-        return acc;
-    },{});
-
-    return categoryMap;
-  }
+    return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+}
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation) => {
     // console.log(userAuth);
@@ -91,6 +85,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
             console.log('error in creating user', error.message);
         }
     }
+    return userSnapshot;
 };
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
@@ -112,3 +107,16 @@ export const signinAuthUserWithEmailAndPassword = async (email, password) => {
 export const signOutUser = async () => await signOut(auth);
 
 export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback)
+
+export const getCurrentUser = () => {
+    return new Promise((reslove, reject) => {
+        const unsubscribe = onAuthStateChanged( 
+            auth,
+            (userAuth) => {
+                unsubscribe();
+                reslove(userAuth);
+            },
+            reject
+        );
+    });
+}
