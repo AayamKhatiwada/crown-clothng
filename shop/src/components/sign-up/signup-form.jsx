@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createUserDocumentFromAuth, signInWithGooglePopup } from "../../routes/utils/firebase";
 import { signupStart } from "../../store/user/user-action";
 import FormInput from "../form-input/form-input";
 
@@ -25,12 +24,6 @@ const SignupForm = () => {
         setstate({ ...state, [name]: value });
     }
 
-    // sign up with google
-    const logGoogleUser = async () =>{
-        const {user} = await signInWithGooglePopup();
-        createUserDocumentFromAuth(user);
-    }
-
     // sign up with user name and password
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -46,7 +39,7 @@ const SignupForm = () => {
 
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {
-                alert('change name man, user already exists');
+                alert('Sorry Sir, we already got the user with the same email');
             } else {
                 console.log(error);
             }
@@ -79,7 +72,6 @@ const SignupForm = () => {
                     <div className="mb-3 row">
                         <div className="offset-sm-4 col-sm-8">
                             <button type="submit" className="btn btn-primary">Submit</button>
-                            <button type="submit" className="btn btn-primary" onClick={logGoogleUser}>Sign up with google</button>
                         </div>
                     </div>
                 </form>

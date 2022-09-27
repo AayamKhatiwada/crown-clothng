@@ -6,7 +6,6 @@ import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth, getCurr
 export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
     try {
         const userSnapshot = yield call(createUserDocumentFromAuth, userAuth, additionalDetails)
-
         yield put(signinSuccess({ id: userSnapshot.id, ...userSnapshot.data() }))
     } catch (error) {
         yield put(signinFailed(error));
@@ -23,6 +22,7 @@ export function* signInWithEmail(action) {
 
     } catch (error) {
         yield put(signinFailed(error))
+        yield alert(error.code)
     }
 }
 
@@ -32,6 +32,8 @@ export function* signInWithGoogle() {
         yield call(getSnapshotFromUserAuth, user)
     } catch (error) {
         yield put(signinFailed(error))
+        yield alert(error.code)
+
     }
 }
 
@@ -52,6 +54,7 @@ export function* signUp({ payload: { email, password, displayName } }) {
         yield put(signupSuccess(user, { displayName }))
     } catch (error) {
         yield put(signupFailed(error));
+        yield alert(error.code)
     }
 }
 
@@ -65,7 +68,7 @@ export function* signOut(){
 }
 
 export function* signinAfterSignup({ payload: { user, additionalDetails } }) {
-    yield put(getSnapshotFromUserAuth, user, additionalDetails);
+    yield call(getSnapshotFromUserAuth, user, additionalDetails);
 }
 
 export function* onSigninWithEmail() {

@@ -12,10 +12,11 @@ import { signoutStart } from "../../store/user/user-action";
 
 const NavigationBar = () => {
     const dispatch = useDispatch();
-    const currentUser  = useSelector(selectCurrentUser);
+    const { currentUser } = useSelector(selectCurrentUser);
     const isCartOpen = useSelector(selectIsCartOpen);
 
     const signOutUser = () => dispatch(signoutStart());
+    // console.log(currentUser)
 
     return (
         <Fragment>
@@ -29,7 +30,12 @@ const NavigationBar = () => {
                         Shop
                     </NavLink>
                     {
-                        currentUser ? (<NavLink as="span" onClick={signOutUser}>LogOut</NavLink>) : (
+                        currentUser ? (
+                            <>
+                                <span>{currentUser.displayName}</span>
+                                <NavLink as="span" onClick={signOutUser}>Sign Out</NavLink>
+                            </>
+                        ) : (
                             <NavLink to='/auth'>
                                 Sign In
                             </NavLink>

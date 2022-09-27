@@ -28,9 +28,7 @@ const SigninForm = () => {
 
         try {
             dispatch(emailSigninStart(email, password));
-            // console.log(user);
             setstate(initialState);
-
         } catch (error) {
             console.log(error);
         }

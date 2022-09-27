@@ -1,7 +1,11 @@
 // import { getRedirectResult } from "firebase/auth";
 // import { useEffect } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import SigninForm from "../../components/sign-in/signin-form";
 import SignupForm from "../../components/sign-up/signup-form";
+import { selectCurrentUser } from "../../store/user/user-selector";
 // import { /*auth, signInWithGoogleRedirect, */ createUserDocumentFromAuth, signInWithGooglePopup } from "../utils/firebase";
 
 
@@ -19,6 +23,14 @@ const Authentication = () => {
     //     const {user} = await signInWithGooglePopup();
     //     createUserDocumentFromAuth(user);
     // }
+
+    const navigate = useNavigate();
+    const { currentUser } = useSelector(selectCurrentUser);
+    useEffect(() => {
+        if (currentUser){
+            navigate('/')
+        }
+    }, [currentUser, navigate]);
 
     return (
         <>
